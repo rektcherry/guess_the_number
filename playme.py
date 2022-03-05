@@ -1,30 +1,48 @@
 import random
 import sys
-guess = input('Guess what number between 0 - 10 I\'m thinking. You get 5 tries go: ')
-wrongAns = ['You may try again, but it looks hopeless','Odds are never in your favour. Try again.','Wrong','Almost there! Or are you?','Not even close!']
-righAns = 'Wow, yaarrr a winner Harrry! Such winning, I take the L.'
-maxRound = 5
-round = 0
 
+# define constant parameters
+stopGame = 69 # this stops the program from running
+lowBound = 0 # range low of the guess
+upBound = 10 # range high of the guess
+
+# let's give the bot some lines to say if the player is right or wrong
+wrongAns = ['Looks hopeless.','Odds are never in your favour.','Wrong.','Almost there! Or are you?','Not even close!']
+rightAns = 'Wow, yaarrr a winner Harrry! You got it! Such winning!'
+
+# introduce the game to the player and get the first guess from the player 
+def getInput():
+    while True:
+        try:
+            guess = int(input(f'Welcome anon. Guess what number I\'m thinking right now between {lowBound} - {upBound}. Exit with {stopGame}: '))
+            break
+        except ValueError:
+            print("Integers only please: ")
+    return(guess)   
+# if the player guesses wrong, then let them try again         
+def tryAgain():
+    while True:
+        try: 
+            guess = int(input('Try again: '))  
+            break
+        except ValueError:
+            print("Integers only please!")  
+    return(guess) 
+    
 def main ():
-    while round < maxRound:
-         num = random.randint(0,10)
-         randAns = secrets.choise(wrongAns)
-         round += 1
-         if guess == num:
-             print(rightAns)
-             break
-         elif guess != num:
-             print(randAns + '/n')
-             guess = input('Round ' + round + '. Go: ')
-             continue
-         if round == maxRound:
-             print('Thanks for playing.')
-             playAgain = input('Play again type 1. Exit type 0: ')
-                 if playAgain == 1:
-                     round = 0
-                 else:
-                     sys.exit('bye bye')
-
+    guess = getInput()
+    while True:
+        num = random.randint(0,10) # computers guess
+        randAns = random.choice(wrongAns).strip() #get random line to say when player is wrong
+        if guess == stopGame:
+            sys.exit('Thanks for playing hun!')  # exit system if user gives stopGame input          
+        if guess == num:  
+            print(rightAns) # user is guessed right. Congratulate them
+            break
+        if guess != num and guess != stopGame and guess >= lowBound and guess <= upBound:
+            print(randAns) #player guessed wrong. Get random line to make fun of them
+        else:
+            print(f'Please, give an integer between {lowBound}-{upBound}.')  #player gave wrong input
+        guess = tryAgain()   # run the tryAgain function to give the player another try if they are wrong
+      
 main()
-
